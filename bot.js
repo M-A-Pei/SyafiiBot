@@ -19,17 +19,15 @@ async function startBot() {
         const hour = date.getHours();
         const minute = date.getMinutes();
 
-        if(hour == 14 && minute == 26){
+        if(hour == 20 && minute == 0){
             const pollOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
             
-            await sock.sendMessage('6285710405170@s.whatsapp.net', {  
+            await sock.sendMessage('628817549959-1612785935@g.us', {  
                 poll: {
                     name: "day", // Poll question
                     values: pollOptions, // Poll options
                 }
             })
-
-            await sock.sendMessage('6285710405170@s.whatsapp.net', {text: "Poll Sent!!!"})
         }
 
         console.log("Hour: ", hour)
@@ -42,6 +40,7 @@ async function startBot() {
         if (!msg.message && !msg.key.fromMe) return;
 
         const from = msg.key.remoteJid; // Sender's ID
+
         let text = ""
 
         if (msg.message?.conversation) {
@@ -54,27 +53,7 @@ async function startBot() {
 
         if(text == "ping"){
             try {
-                // await sock.sendMessage(from, { text: "yup, bot's active, nothing wrong here" });
-                
-                const pollOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-
-                await sock.sendMessage(from, {  
-                    poll: {
-                        name: "day", // Poll question
-                        values: pollOptions, // Poll options
-                        selectableCount: 1
-                    }
-                })
-
-                console.log("poll sent successfully")
-                console.log(
-                    {poll: {
-                        name: "day", // Poll question
-                        values: pollOptions, // Poll options
-                        selectableCount: 1
-                    }}
-                )
-                
+                await sock.sendMessage(from, { text: "yup, bot's active, nothing wrong here" });
             } catch (error) {
                 console.error("Error sending message:", error);
             }
