@@ -14,46 +14,67 @@ async function startBot() {
 
     setInterval(sendDailyPoll, 60 * 1000);
 
-    function sendDailyPoll() {
+    async function sendDailyPoll() {
         const date = new Date();
         const hour = date.getHours();
         const minute = date.getMinutes();
 
-        if(hour == 20 || minute == 0){
+        if(hour == 14 && minute == 26){
             const pollOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
             
-            sock.sendMessage('6285710405170@s.whatsapp.net', {  
+            await sock.sendMessage('6285710405170@s.whatsapp.net', {  
                 poll: {
-                    name: "day: 100", // Poll question
+                    name: "day", // Poll question
                     values: pollOptions, // Poll options
                 }
             })
+
+            await sock.sendMessage('6285710405170@s.whatsapp.net', {text: "Poll Sent!!!"})
         }
+
+        console.log("Hour: ", hour)
+        console.log("Minute: ", minute)
     }
 
     // Listen for incoming messages
     sock.ev.on('messages.upsert', async (message) => {
-        console.log('Received message:', message);
         const msg = message.messages[0];
         if (!msg.message && !msg.key.fromMe) return;
 
         const from = msg.key.remoteJid; // Sender's ID
         let text = ""
 
-        console.log("Received message from", msg.pushName);
-        console.log("REMOTE JID: ", from);
-
-        if (msg.message.conversation) {
+        if (msg.message?.conversation) {
             text = msg.message.conversation;
-        } else if (msg.message.extendedTextMessage?.text) {
+        } else if (msg.message?.extendedTextMessage?.text) {
             text = msg.message.extendedTextMessage.text;
-        } else if (msg.messageStubParameters) {
+        } else if (msg?.messageStubParameters) {
             text = msg.messageStubParameters.join(' '); 
         }
 
         if(text == "ping"){
             try {
-                await sock.sendMessage(from, { text: "skibidi sigma level 1000 gyatt" });
+                // await sock.sendMessage(from, { text: "yup, bot's active, nothing wrong here" });
+                
+                const pollOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+                await sock.sendMessage(from, {  
+                    poll: {
+                        name: "day", // Poll question
+                        values: pollOptions, // Poll options
+                        selectableCount: 1
+                    }
+                })
+
+                console.log("poll sent successfully")
+                console.log(
+                    {poll: {
+                        name: "day", // Poll question
+                        values: pollOptions, // Poll options
+                        selectableCount: 1
+                    }}
+                )
+                
             } catch (error) {
                 console.error("Error sending message:", error);
             }
