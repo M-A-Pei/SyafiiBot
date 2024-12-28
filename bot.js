@@ -5,6 +5,44 @@ const sqlite3 = require('sqlite3').verbose();
 
 async function startBot() {
     
+    // Create a new SQLite database (or open if it exists)
+    const db = new sqlite3.Database('./database/db.sqlite', (err) => {
+        if (err) {
+        console.error("Error opening database:", err.message);
+        } else {
+        console.log("Connected to SQLite database.");
+        }
+    });
+  
+  // Create a table
+  db.serialize(() => {
+    db.run(`
+    CREATE TABLE IF NOT EXISTS counter (
+        value INTEGER
+    );
+    `, (err) => {
+      if (err) {
+        console.error("Error creating table:", err.message);
+      } else {
+        console.log("Table created successfully.");
+      }
+    });
+
+    db.run(
+        `INSERT INTO counter (value) 
+         SELECT ? 
+         WHERE NOT EXISTS (SELECT 1 FROM counter)`,
+        [113], // Replace 0 with the value you want to insert
+        (err) => {
+          if (err) {
+            console.error("Error inserting record:", err.message);
+          } else {
+            console.log("Record inserted: 113");
+          }
+        }
+      );      
+  });
+
     const { state, saveCreds } = await useMultiFileAuthState('./auth'); 
 
     const sock = makeWASocket({
@@ -15,8 +53,8 @@ async function startBot() {
     
     sock.ev.on('creds.update', saveCreds);
 
-    //set an interval for send daily poll
-    setInterval(() => sendDailyPoll(), 60 * 1000);
+    //set an interval for send daily poll (every 1 minute)
+    setInterval(() => sendDailyPoll(sock, db), 1000 * 60);
 
     // Listen for incoming messages
     sock.ev.on('messages.upsert', async (message) => {

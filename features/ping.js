@@ -1,8 +1,11 @@
 async function ping(msg, sock){
     if(!msg.key.fromMe) return;
-
+    
     const from = msg.key.remoteJid; // Sender's ID
-
+    
+    console.log(msg);
+    console.log(from);
+    
     let text = ""
 
     if (msg.message?.conversation) {

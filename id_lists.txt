@@ -1,0 +1,3 @@
+gc id = 628817549959-1612785935@g.us
+test gc id = 120363381993038682@g.us
+personal id = 6285710405170@s.whatsapp.net
