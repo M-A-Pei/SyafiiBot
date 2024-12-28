@@ -1,7 +1,9 @@
 const { default: makeWASocket, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const sendDailyPoll = require("./features/sendDailyPoll")
 const ping = require("./features/ping");
+const dbinit = require("./database/dbinit");
 const sqlite3 = require('sqlite3').verbose();
+const checkEasterEggs = require("./features/checkEasterEggs");
 
 async function startBot() {
     
@@ -14,34 +16,7 @@ async function startBot() {
         }
     });
   
-  // Create a table
-  db.serialize(() => {
-    db.run(`
-    CREATE TABLE IF NOT EXISTS counter (
-        value INTEGER
-    );
-    `, (err) => {
-      if (err) {
-        console.error("Error creating table:", err.message);
-      } else {
-        console.log("Table created successfully.");
-      }
-    });
-
-    db.run(
-        `INSERT INTO counter (value) 
-         SELECT ? 
-         WHERE NOT EXISTS (SELECT 1 FROM counter)`,
-        [113], // Replace 0 with the value you want to insert
-        (err) => {
-          if (err) {
-            console.error("Error inserting record:", err.message);
-          } else {
-            console.log("Record inserted: 113");
-          }
-        }
-      );      
-  });
+    dbinit(db);
 
     const { state, saveCreds } = await useMultiFileAuthState('./auth'); 
 
@@ -62,6 +37,7 @@ async function startBot() {
         if(!msg.message) return;
             
         ping(msg, sock);
+        checkEasterEggs(msg, sock, db);
     });
 
 
