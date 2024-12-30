@@ -34,6 +34,11 @@ const easterEggs = [
     "Javascript sucks",
     "Java",
     "Python",
+    "The host",
+    "Caviar",
+    "Quandale Dingle",
+    "Femboys",
+    "March 7th",
 ];
 
 module.exports = easterEggs;

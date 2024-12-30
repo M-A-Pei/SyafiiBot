@@ -2,9 +2,10 @@ const easterEggs = require("../data/easterEggs");
 const dbQueries = require("../database/dbQueries");
 
 async function checkEasterEggs(msg, sock, db) {
-    //if(msg.key.fromMe || msg?.messageStubParameters) return;
+    if(msg.key.fromMe || msg?.messageStubParameters) return;
 
     const from = msg.key.remoteJid;
+    const sender = msg.pushName || msg.key.participant.split('@')[0] || msg.key.remoteJid.split('@')[0];
     let text = ""
 
     if (msg.message?.conversation) {            //get the message
@@ -25,15 +26,15 @@ async function checkEasterEggs(msg, sock, db) {
         return;
     }
 
-    await dbQueries.updateEgg(db, matchedEasterEgg, msg.pushName)
+    await dbQueries.updateEgg(db, matchedEasterEgg, sender)
     const allEggs = await dbQueries.getAllEggs(db)
     const foundEggs = allEggs.filter(item => {
         return item.found
     })
 
     try {                                   //send message
-        const messageOutput = `Easter Egg *[${matchedEasterEgg}]* Found! by ${msg.pushName}🎉
-(${foundEggs.length} out of ${allEggs.length}) discovered`
+        const messageOutput = `Easter Egg *[${matchedEasterEgg}]* Found! by ${sender}🎉
+        (${foundEggs.length} out of ${allEggs.length}) discovered`
         await sock.sendMessage(from, { text: messageOutput});
         console.log("Easter Egg Found: " + matchedEasterEgg);
     } catch (error) {

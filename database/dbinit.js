@@ -18,12 +18,12 @@ function dbinit(db) {
             `INSERT INTO counter (value) 
             SELECT ? 
             WHERE NOT EXISTS (SELECT 1 FROM counter)`,
-            [113], // Replace 0 with the value you want to insert
+            [115], // Replace 0 with the value you want to insert
             (err) => {
             if (err) {
                 console.error("Error inserting record:", err.message);
             } else {
-                console.log("day counter inserted: 113");
+                console.log("day counter inserted: 115");
             }
             }
         );

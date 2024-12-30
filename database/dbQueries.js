@@ -28,6 +28,21 @@ const getAllEggs = (db) => {                      //query for getting all the eg
     })
 }
 
+const getAllEggsInfo = (db) => {                      //query for getting all the eggs, to get number of eggs that are found and not found
+    return new Promise((resolve, reject) =>{
+        db.all(`
+            SELECT * FROM easterEggs`, (err, row) => {
+            if (err) {
+                console.error("Error reading table:", err.message);
+                reject(err);
+            } else {
+                console.log("Table read successfully.");
+                resolve(row);
+            }
+        });
+    })
+}
+
 const updateEgg = (db, matchedEasterEgg, finder) => {                   //query for updating the egg to set it to found
     return new Promise((resolve, reject) =>{
         console.log(matchedEasterEgg)
@@ -46,4 +61,4 @@ const updateEgg = (db, matchedEasterEgg, finder) => {                   //query 
     })
 }
 
-module.exports = {getEgg, getAllEggs, updateEgg}
+module.exports = {getEgg, getAllEggs, updateEgg, getAllEggsInfo}

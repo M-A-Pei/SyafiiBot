@@ -4,6 +4,7 @@ const ping = require("./features/ping");
 const dbinit = require("./database/dbinit");
 const sqlite3 = require('sqlite3').verbose();
 const checkEasterEggs = require("./features/checkEasterEggs");
+const listEggs = require("./features/ListEggs");
 
 async function startBot() {
     
@@ -37,7 +38,9 @@ async function startBot() {
         if(!msg.message) return;
             
         ping(msg, sock);
+
         checkEasterEggs(msg, sock, db);
+        listEggs(msg, sock, db);
     });
 
 

@@ -45,7 +45,7 @@ async function sendDailyPoll(sock, db) {
         console.log("dayCounter: " + dayCounter);
     }
 
-    if(hour == 0){
+    if(hour < 20){
         DailyPollSent = false;
     }
 }
