@@ -4,6 +4,8 @@ async function sendDailyPoll(sock, db) {
     const date = new Date();
     const hour = date.getHours();
 
+    console.log('Current Hour: ', hour)
+
     const getDayCounter = () => {
         return new Promise((resolve, reject) =>{
             db.get(`SELECT value FROM counter`, (err, row) => {
