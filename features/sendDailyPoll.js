@@ -20,7 +20,7 @@ async function sendDailyPoll(sock, db) {
         })
     }
 
-    if(hour >= 15 && !DailyPollSent){
+    if(hour >= 13 && !DailyPollSent){
         const dayCounter = await getDayCounter();
         const pollOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         
@@ -47,7 +47,7 @@ async function sendDailyPoll(sock, db) {
         console.log("dayCounter: " + dayCounter);
     }
 
-    if(hour < 15){
+    if(hour < 13){
         DailyPollSent = false;
     }
 }
